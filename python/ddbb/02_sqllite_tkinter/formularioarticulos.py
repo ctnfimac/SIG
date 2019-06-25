@@ -15,6 +15,7 @@ class FormularioArticulos:
         self.consultar_por_codigo_view()
         self.listado_completo_view()
         self.eliminar_articulo_view()
+        self.modificar_articulo_view()
 
         self.cuaderno1.grid(column = 0 , row = 0 , padx = 10, pady = 10)
         self.ventana1.mainloop()
@@ -43,7 +44,10 @@ class FormularioArticulos:
         self.boton1.grid(column=1, row=2, padx=4, pady=4)
 
     def agregar(self):
-        datos=(self.descripcioncarga.get(), self.preciocarga.get())
+        datos=(self.preciocarga.get(), self.descripcioncarga.get())
+        
+        #print(f"descripcion: {self.descripcioncarga.get()}")
+        #print(datos)
         self.articulo1.agregar(datos)
         mb.showinfo("Información", "Los datos fueron cargados")
         self.descripcioncarga.set("")
@@ -65,14 +69,14 @@ class FormularioArticulos:
         
         self.label2 = ttk.Label(self.labelframe1, text = "Descripción:")
         self.label2.grid(column = 0, row = 3, padx = 4, pady = 4)
-        self.descripcioncarga = tk.StringVar()
-        self.entrydescripcion = ttk.Entry(self.labelframe1, textvariable = self.descripcioncarga, state = "readonly")
+        self.descripcionConsulta = tk.StringVar()
+        self.entrydescripcion = ttk.Entry(self.labelframe1, textvariable = self.descripcionConsulta, state = "readonly")
         self.entrydescripcion.grid(column = 1, row = 3, padx = 4 , pady = 4)
 
         self.label3 = ttk.Label(self.labelframe1, text = "Precio:")
         self.label3.grid(column = 0, row = 4, padx = 4, pady = 4)
-        self.preciocarga = tk.StringVar()
-        self.entryprecio = ttk.Entry(self.labelframe1, textvariable = self.preciocarga, state = "readonly")
+        self.precioconsulta = tk.StringVar()
+        self.entryprecio = ttk.Entry(self.labelframe1, textvariable = self.precioconsulta, state = "readonly")
         self.entryprecio.grid(column = 1, row = 4, padx = 4 , pady = 4)
 
         self.botonEnviar = ttk.Button(self.labelframe1, text = "Consultar", command = self.consultar)
@@ -82,11 +86,11 @@ class FormularioArticulos:
         idLeido = (self.codigocarga.get(),)
         articulo = self.articulo1.buscarArticuloPorId(idLeido)
         if articulo != None:
-            self.descripcioncarga.set(articulo[0]) 
-            self.preciocarga.set(articulo[1])
+            self.descripcionConsulta.set(articulo[0]) 
+            self.precioconsulta.set(articulo[1])
         else:
-            self.descripcioncarga.set("")
-            self.preciocarga.set("")
+            self.descripcionConsulta.set("")
+            self.precioconsulta.set("")
             mb.showinfo("Informacion","No existe un artículo con el código ingresado")
 
     def listado_completo_view(self):
@@ -117,4 +121,135 @@ class FormularioArticulos:
 
         self.labelcodigo = ttk.Label(self.labelFrame1, text = "Código: ")
         self.labelcodigo.grid(column = 0 ,row = 1, padx = 3 , pady = 3)   
+        self.codigoCarga = tk.StringVar()
+        self.entryCodigo = ttk.Entry(self.labelFrame1, textvariable = self.codigoCarga)
+        self.entryCodigo.grid(column = 2 , row = 1 , padx = 5 , pady = 5)
+
+        self.btnBorrar = ttk.Button(self.labelFrame1, text = "Borrar", command = self.borrarArticulo)
+        self.btnBorrar.grid(column = 2, row = 3, padx = 4, pady = 4)
+    
+    def borrarArticulo(self):
+        id = (self.entryCodigo.get(),)
+        
+        # primero me fijo si existe el articulo con dicho id
+        articuloBuscado = self.articulo1.buscarArticuloPorId(id)
+        existe =  False if articuloBuscado == None else True
+
+        # si el articulo existe procedo a eliminar sino informo que no existe
+        if existe == True:
+            self.articulo1.eliminar(id)
+            msj = "el artículo de id: "+ str(id) +", nombre: " +articuloBuscado[0]+", y precio: " + str(articuloBuscado[1]) +"\n ha sido eliminado"
+            mb.showinfo("Informacion",msj)
+            self.codigoCarga.set("")
+        else:
+            mb.showinfo("Informacion","El artículo con el id buscado no existe")
+            self.codigoCarga.set("")
+    
+    def modificar_articulo_view(self):
+        self.paginaDeModificarArticulo = ttk.Frame(self.cuaderno1) 
+        self.cuaderno1.add(self.paginaDeModificarArticulo, text = "Modificar artículo")
+
+        self.tituloDelLabelFrame = ttk.LabelFrame(self.paginaDeModificarArticulo, text = "Artículo")
+        self.tituloDelLabelFrame.grid(column = 0 , row = 0, padx = 5, pady = 5)
+
+        self.lbl_codigo_update = ttk.Label(self.tituloDelLabelFrame, text = "Código: ")
+        self.lbl_codigo_update.grid(column = 0 , row = 0, padx = 5 , pady = 5)
+        self.codigoUpdate = tk.StringVar()
+        self.codigoUpdateEntry = ttk.Entry(self.tituloDelLabelFrame, textvariable = self.codigoUpdate)
+        self.codigoUpdateEntry.grid( column = 1, row = 0 , padx = 4 , pady = 4)
+
+        self.lbl_descripcion_update = ttk.Label(self.tituloDelLabelFrame, text = "Descripción: ")
+        self.lbl_descripcion_update.grid(column = 0 , row = 1, padx = 5 , pady = 5)
+        self.descripcionUpdate = tk.StringVar()
+        self.descripcionUpdateEntry = ttk.Entry(
+                                                self.tituloDelLabelFrame, 
+                                                state = "disabled",
+                                                textvariable = self.descripcionUpdate
+                                                )
+
+        self.descripcionUpdateEntry.grid( column = 1, row = 1 , padx = 4 , pady = 4)
+
+        self.lbl_precio_update = ttk.Label(self.tituloDelLabelFrame, text = "precio: ")
+        self.lbl_precio_update.grid(column = 0 , row = 2, padx = 5 , pady = 5)
+        self.precioUpdate = tk.StringVar()
+        self.precioUpdateEntry = ttk.Entry(
+                                            self.tituloDelLabelFrame, 
+                                            state = "disabled", 
+                                            textvariable = self.precioUpdate 
+                                          )
+
+        self.precioUpdateEntry.grid( column = 1, row = 2 , padx = 4 , pady = 4)
+
+        self.btn_consultar = ttk.Button(
+                                        self.tituloDelLabelFrame, 
+                                        text = "Consultar",  
+                                        command = self.modificar_consultar
+                                        )
+
+        self.btn_consultar.grid(column = 1, row = 4, padx = 4 , pady = 4)
+
+        self.btn_modificar = ttk.Button(
+                                        self.tituloDelLabelFrame, 
+                                        text = "Modificar", 
+                                        state = "disabled", 
+                                        command = self.modificar
+                                        )
+
+        self.btn_modificar.grid(column = 1, row = 5, padx = 4 , pady = 4)
+
+        self.btn_cancelar = ttk.Button(
+                                        self.tituloDelLabelFrame, 
+                                        text = "cancelar", 
+                                        state = "disabled", 
+                                        command = self.cancelarModificacion
+                                        )
+
+        self.btn_cancelar.grid(column = 0, row = 4, padx = 4 , pady = 4)
+
+
+    def modificar_consultar(self):
+        codigoDelArticulo = (self.codigoUpdateEntry.get(),)
+        print(f'consultando... codigo = {codigoDelArticulo}')
+        articuloBuscado = self.articulo1.buscarArticuloPorId(codigoDelArticulo)
+        existe =  False if articuloBuscado == None else True
+
+        if existe == True:
+            self.btn_modificar["state"] = "enable"
+            self.precioUpdateEntry["state"] = "enable"
+            self.descripcionUpdateEntry["state"] = "enable"
+            self.codigoUpdateEntry["state"] = "disable"
+            self.descripcionUpdate.set(articuloBuscado[0])
+            self.precioUpdate.set(articuloBuscado[1])
+            self.btn_cancelar["state"] = "enable"
+        else:
+            mb.showinfo("Informacion","El articulo con el codigo ingresado no existe")
+            self.precioUpdate.set("")
+            self.descripcionUpdate.set("")
+            self.btn_modificar["state"] = "disable"
+            self.precioUpdateEntry["state"] = "disable"
+            self.descripcionUpdateEntry["state"] = "disable"
+
+    def modificar(self):
+        datos = (self.descripcionUpdateEntry.get(),self.precioUpdateEntry.get(),self.codigoUpdateEntry.get(),)
+        self.articulo1.modificar(datos)
+        mb.showinfo("Informacion","Articulo modificado con exito")
+        self.codigoUpdate.set("")
+        self.btn_modificar["state"] = "disable"
+        self.descripcionUpdate.set("")
+        self.precioUpdate.set("")
+        self.descripcionUpdateEntry["state"] = "disable"
+        self.precioUpdateEntry["state"] = "disable"
+        self.codigoUpdateEntry["state"] = "enable"
+        self.btn_cancelar["state"] = "disable"
+
+    def cancelarModificacion(self):
+        self.codigoUpdate.set("")
+        self.descripcionUpdate.set("")
+        self.precioUpdate.set("")
+        self.btn_modificar["state"] = "disable"
+        self.btn_cancelar["state"] = "disable"
+        self.descripcionUpdateEntry["state"] = "disable"
+        self.precioUpdateEntry["state"] = "disable"
+        self.codigoUpdateEntry["state"] = "enable"
+
 app = FormularioArticulos()

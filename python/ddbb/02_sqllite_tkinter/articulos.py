@@ -43,6 +43,19 @@ class Articulos:
         finally:
             myconexion.close()
 
+    def modificar(self,datos):
+        try:
+            myconexion = self.abrir()
+            sentencia = """
+                            update articulos 
+                            set descripcion = ? , precio = ?
+                            where codigo = ?
+                        """
+            myconexion.execute(sentencia, datos)
+            myconexion.commit()
+        finally:
+            myconexion.close()
+
 articulos = Articulos()
 
 
