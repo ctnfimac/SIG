@@ -9,3 +9,7 @@ CREATE TABLE persona(
     fecha_nacimiento Date NOT NULL,
     CONSTRAINT PK_persona PRIMARY KEY(codigo)
 );
+
+
+CREATE SEQUENCE persona_codigo_seq;
+ALTER TABLE persona ALTER COLUMN codigo SET DEFAULT nextval('persona_codigo_seq');
