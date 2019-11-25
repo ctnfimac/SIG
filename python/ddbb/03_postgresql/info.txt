@@ -1,0 +1,9 @@
+En este programa se busca realizar la conexion a una base de datos postgres 
+mediante la programacion orientada a objetos.
+
+el objetivo final es poder:
+        mostrar los registros de una tabla
+        agregar uno nuevo
+        buscar uno por codigo
+        eliminar un registro
+        modificar registro 
