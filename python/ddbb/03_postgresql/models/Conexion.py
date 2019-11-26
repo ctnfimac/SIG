@@ -34,6 +34,10 @@ class Conexion(metaclass=ABCMeta):
     def insert(self,object):
         pass
 
+    @abstractclassmethod
+    def buscoPersonaPorCodigo(self, codigo):
+        pass
+
     def desconectar(self):
         if self.conexion:
             self.conexion.close()
