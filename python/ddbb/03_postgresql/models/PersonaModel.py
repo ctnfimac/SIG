@@ -48,6 +48,19 @@ class PersonaModel(Conexion):
             print("Primero tiene que ejecutar el metodo conectar()")
             return None
 
+    def eliminarPersonaPorCodigo(self, codigo):
+        self.conectar()
+        if self.conexion:
+            cursor = self.conexion.cursor()
+            personaEliminada = self.buscoPersonaPorCodigo(codigo)
+            sql = "DELETE FROM persona WHERE codigo = '%s' LIMIT 1;"%(codigo)
+            cursor.execute(sql)
+            self.desconectar()
+            return personasEliminada
+        else:
+            print("Primero tiene que ejecutar el metodo conectar()")
+            return None
+
     def imprimirListaDePersonas(self, personas):
         print(f"Tabla de Personas\n")
         for fila in personas:

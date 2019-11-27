@@ -38,6 +38,10 @@ class Conexion(metaclass=ABCMeta):
     def buscoPersonaPorCodigo(self, codigo):
         pass
 
+    @abstractclassmethod
+    def eliminarPersonaPorCodigo(self, codigo):
+        pass
+
     def desconectar(self):
         if self.conexion:
             self.conexion.close()

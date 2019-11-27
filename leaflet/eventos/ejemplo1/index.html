@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Zoom Example</title>
+      <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+      <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+   </head>
+   
+   <body>
+      <div id = "map" style = "width:900px; height:580px"></div>
+      <script>
+         // Creating map options
+         var mapOptions = {
+            center: [17.385044, 78.486671],
+            zoom: 10,
+            zoomControl: false
+         }
+         var map = new L.map('map', mapOptions); // Creating a map object
+         
+         // Creating a Layer object
+         var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+         map.addLayer(layer);   // Adding layer to the map
+         
+         // zoom control options
+         var zoomOptions = {
+            zoomInText: '+',
+            zoomOutText: '-',
+         };
+         var zoom = L.control.zoom(zoomOptions);   // Creating zoom control
+         zoom.addTo(map);   // Adding zoom control to the map
+
+        //map.removeLayer( layer ) // elimino la caoa
+        map.on('zoomend ', function(e) {
+            //if ( map.getZoom() > 13 ){ map.removeLayer( layer )}
+            //else if ( map.getZoom() <= 13 ){ map.addLayer( layer )}
+            console.log('estoy en el evento ' + map.getZoom())
+         });
+      </script>
+   </body>
+   
+</html>

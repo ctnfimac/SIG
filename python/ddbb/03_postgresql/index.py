@@ -30,3 +30,17 @@ persona = PersonaModel()
 codigo = 7
 personaBuscada = persona.buscoPersonaPorCodigo(codigo)
 persona.imprimirListaDePersonas(personaBuscada)
+
+
+##
+# Eliminar una persona ingresando su codigo
+###
+
+
+persona = PersonaModel()
+codigoDeLaPersonaAeliminar = 1
+personaEliminada = persona.eliminarPersonaPorCodigo(codigoDeLaPersonaAeliminar)
+if personaEliminada:
+    print("Persona eliminada")
+    persona.imprimirListaDePersonas(personaEliminada)
+else: print("No se eliminó ninguna persona")
