@@ -23,7 +23,7 @@ class PersonaModel(Conexion):
         self.conectar()
         if self.conexion:
             cursor = self.conexion.cursor()
-            sql = "INSERT INTO persona(nombre, apellido, fecha_nacimiento) VALUES ('%s','%s','%s');"%(persona.nombre, persona.apellido, persona.fecha_nacimiento)
+            sql = "INSERT INTO persona(codigo, nombre, apellido, fecha_nacimiento) VALUES ('%s','%s','%s','%s');"%(persona.codigo,persona.nombre, persona.apellido, persona.fecha_nacimiento)
             cursor.execute(sql)
             self.conexion.commit()
             print("Se agrego una persona correctamente")
@@ -49,17 +49,22 @@ class PersonaModel(Conexion):
             return None
 
     def eliminarPersonaPorCodigo(self, codigo):
-        self.conectar()
-        if self.conexion:
-            cursor = self.conexion.cursor()
-            personaEliminada = self.buscoPersonaPorCodigo(codigo)
-            sql = "DELETE FROM persona WHERE codigo = '%s' LIMIT 1;"%(codigo)
-            cursor.execute(sql)
-            self.desconectar()
-            return personasEliminada
+        personaEliminada = self.buscoPersonaPorCodigo(codigo)
+        if personaEliminada:
+            self.conectar()
+            if self.conexion:
+                cursor = self.conexion.cursor()
+                sql = "DELETE FROM persona WHERE codigo='%s';"%(codigo)
+                cursor.execute(sql)
+                self.conexion.commit()
+                self.desconectar()
+                return personaEliminada
+            else:
+                print("Primero tiene que ejecutar el metodo conectar()")
+                return None
         else:
-            print("Primero tiene que ejecutar el metodo conectar()")
-            return None
+            return False
+        
 
     def imprimirListaDePersonas(self, personas):
         print(f"Tabla de Personas\n")

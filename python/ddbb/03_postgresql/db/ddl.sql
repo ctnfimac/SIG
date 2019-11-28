@@ -1,9 +1,11 @@
 CREATE TABLESPACE ctn_misdatos LOCATION '/var/ctndatos/miprimertablespace';
 
+DROP DATABASE empresa;
+
 CREATE DATABASE empresa TABLESPACE = ctn_misdatos;
 
 CREATE TABLE persona(
-    codigo int,
+    codigo varchar UNIQUE,
     nombre varchar(50) NOT NULL,
     apellido varchar(50) NOT NULL,
     fecha_nacimiento Date NOT NULL,
@@ -11,5 +13,5 @@ CREATE TABLE persona(
 );
 
 
-CREATE SEQUENCE persona_codigo_seq;
-ALTER TABLE persona ALTER COLUMN codigo SET DEFAULT nextval('persona_codigo_seq');
+--CREATE SEQUENCE persona_codigo_seq;
+--ALTER TABLE persona ALTER COLUMN codigo SET DEFAULT nextval('persona_codigo_seq');
