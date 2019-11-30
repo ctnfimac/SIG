@@ -42,10 +42,14 @@ class Conexion(metaclass=ABCMeta):
     def eliminarPersonaPorCodigo(self, codigo):
         pass
 
+    @abstractclassmethod
+    def modificarPersona(self,persona):
+        pass
+
     def desconectar(self):
         if self.conexion:
             self.conexion.close()
-            print('La conexión con Postgresql se a cerrado')
+            #print('La conexión con Postgresql se a cerrado')
 
 # mirar acá:
 #https://pynative.com/python-postgresql-tutorial/ 

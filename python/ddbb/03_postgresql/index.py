@@ -11,7 +11,6 @@ tablaDePersonas = persona.getTable()
 persona.imprimirListaDePersonas(tablaDePersonas)
 
 
-
 ##
 # bloque en el que agrego una persona nueva
 ###
@@ -45,3 +44,13 @@ if personaEliminada:
     persona.imprimirListaDePersonas(personaEliminada)
 else: print("No se eliminó ninguna persona")
 """
+
+##
+# Modificar una persona ingresando su codigo y sus 
+# valores nuevos
+##
+
+persona = PersonaModel()
+codigoDeLaPersonaAModificar = '2'
+personaModificada = Persona(codigoDeLaPersonaAModificar,'Sasha',None, None)
+persona.modificarPersona(personaModificada)

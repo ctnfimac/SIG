@@ -66,7 +66,34 @@ class PersonaModel(Conexion):
             return False
         
 
+    def modificarPersona(self, persona):
+        
+        p = self.buscoPersonaPorCodigo(persona.codigo)
+        
+        # obtengo solo la primer persona que es la que me interesa
+        for fila in p:
+            personaAModificar = fila
+            break
+
+        if personaAModificar: 
+            self.conectar()
+            
+            if self.conexion:     
+                codigo = persona.codigo                
+                nombre = persona.nombre if persona.nombre is not None else personaAModificar.nombre
+                apellido =  persona.apellido if persona.apellido is not None else personaAModificar.apellido  
+                fecha_nacimiento = persona.fecha_nacimiento if persona.fecha_nacimiento is not None else personaAModificar.fecha_nacimiento 
+                cursor = self.conexion.cursor()
+                sql = "UPDATE persona SET nombre='%s', apellido='%s', fecha_nacimiento='%s' WHERE codigo='%s';"%(nombre, apellido, fecha_nacimiento, codigo)
+                cursor.execute(sql)
+                self.conexion.commit()
+                self.desconectar()
+            else:
+                print("Sin conexion")
+            
+        else:
+            return False
+       
     def imprimirListaDePersonas(self, personas):
-        print(f"Tabla de Personas\n")
         for fila in personas:
             print(f"Nombre: {fila.nombre}, Apellido: {fila.apellido}, Nacimiento: {fila.fecha_nacimiento} \n")
