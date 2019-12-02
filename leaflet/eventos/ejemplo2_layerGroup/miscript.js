@@ -57,5 +57,21 @@ this.layer = L.tileLayer(baseLayer.uri,baseLayer.params);
 var circulo = L.circle([-34.649932,-58.455089], 600, {color: 'tomato', fillColor:
 '#f03', fillOpacity: 0} );
 
+
+
+function popUpInfo(feature, layer) {
+    // does this feature have a property named popupContent?
+    if (feature.properties && feature.properties.barrio) {
+        layer.bindPopup("<b>"+feature.properties.barrio+"</b><br>"+feature.properties.comuna+" ("+feature.properties.perimetro+")");
+        //layer.bindPopup("<b>"+feature.properties.nomb_mus);
+    }
+}
+
+L.geoJson(barrios, {
+    //onEachFeature: popUpInfo
+    }).addTo(map);
+
+L.geoJson(barrios).removeTo(map);
+
 // Adding circulo to the layer group
 layerGroup.addLayer(circulo);
