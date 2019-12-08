@@ -1,0 +1,4 @@
+# Api con datos estaticos
+
+En esta practica realizaremos las peticiones basicas de una api
+con una conexion a la base de datos empresa
