@@ -1,5 +1,5 @@
 from models.Conexion import Conexion
-from flask import jsonify
+from flask import jsonify, request
 from flask_restful import Resource, Api
 from sqlalchemy import create_engine
 
@@ -28,6 +28,29 @@ class Persona(Resource):
             con.desconectar()
         else:
             print("Primero tiene que ejecutar el metodo conectar()")
+            return None
+
+
+    def post(self):
+        con = Conexion()
+        con.conectar()
+        if con.conexion:
+            cursor = con.conexion.cursor()
+            codigo = request.json['codigo']
+            nombre = request.json['nombre']
+            apellido = request.json['apellido']
+            fecha_nacimiento = request.json['fecha_nacimiento']
+            print(f"codigo: {codigo}")
+            print(f"nombre: {nombre}")
+            print(f"apellido: {apellido}")
+            print(f"fecha_nacimiento: {fecha_nacimiento}")
+            sql = "INSERT INTO persona(codigo, nombre, apellido, fecha_nacimiento) VALUES ('%s','%s','%s','%s');"%(codigo,nombre, apellido, fecha_nacimiento)
+            cursor.execute(sql)
+            con.conexion.commit()
+            return {'status': 'Nueva Persona agregada'}
+            con.desconectar()
+        else:
+            print("Problemas con la conexión")
             return None
 
 # fuentes:
