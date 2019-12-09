@@ -53,6 +53,44 @@ class Persona(Resource):
             print("Problemas con la conexión")
             return None
 
+class PersonaUpdate(Resource):
+    def put(self, persona_codigo):
+        con = Conexion()
+        con.conectar()
+        if con.conexion:
+            cursor = con.conexion.cursor()
+            nombre = request.json['nombre']
+            apellido = request.json['apellido']
+            fecha_nacimiento = request.json['fecha_nacimiento']
+            sql = "UPDATE persona SET nombre = '%s', apellido = '%s' , fecha_nacimiento = '%s' WHERE codigo = '%s';"%(nombre, apellido, fecha_nacimiento, persona_codigo)
+            cursor.execute(sql)
+            con.conexion.commit()
+            con.desconectar()
+            return { "respuesta": "cambio realizado"}
+        else:
+            print("Problemas con la conexión")
+            return None   
+    
+
+class PersonaData(Resource):
+    def get(self, codigo):
+        con = Conexion()
+        con.conectar()
+        if con.conexion:
+            cursor = con.conexion.cursor()
+            sql = "SELECT codigo, nombre, apellido, fecha_nacimiento FROM persona WHERE codigo = '%s' LIMIT 1;"%(codigo)
+            cursor.execute(sql)
+            personas = []
+            columnas = ['codigo','nombre','apellido','fecha_nacimiento']
+            for row in cursor:
+                personas.append(dict(zip(columnas,[row[0],row[1],row[2],row[3]])))
+            resultado =  {'persona': personas}
+            con.desconectar()
+            return jsonify(resultado)
+        else:
+            print("Problemas con la conexión")
+            return None
+
 # fuentes:
 # https://unipython.com/como-hacer-paso-a-paso-una-api-restful-en-flask-con-python/
 # https://www.bogotobogo.com/python/python_dictionary_comprehension_with_zip_from_list.php
