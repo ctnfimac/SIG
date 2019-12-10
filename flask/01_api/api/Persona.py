@@ -91,6 +91,24 @@ class PersonaData(Resource):
             print("Problemas con la conexión")
             return None
 
+
+class PersonaDelete(Resource):
+    
+    def delete(self, persona_codigo):
+        con = Conexion()
+        con.conectar()
+        if con.conexion:
+            cursor = con.conexion.cursor()
+            sql = "DELETE FROM persona WHERE codigo = '%s';"%(persona_codigo)
+            cursor.execute(sql)
+            con.conexion.commit()
+            resultado =  {'respuesta': 'se elimino la persona'}
+            con.desconectar()
+            return jsonify(resultado)
+        else:
+            print("Problemas con la conexión")
+            return None
+
 # fuentes:
 # https://unipython.com/como-hacer-paso-a-paso-una-api-restful-en-flask-con-python/
 # https://www.bogotobogo.com/python/python_dictionary_comprehension_with_zip_from_list.php

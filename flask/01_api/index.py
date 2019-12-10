@@ -1,5 +1,5 @@
 from flask import Flask
-from api.Persona import Persona, PersonaData, PersonaUpdate
+from api.Persona import Persona, PersonaData, PersonaUpdate, PersonaDelete
 from flask_restful import Resource, Api
 
 
@@ -10,6 +10,8 @@ api = Api(app)
 api.add_resource(Persona, '/persona')
 api.add_resource(PersonaUpdate, '/persona/<persona_codigo>')
 api.add_resource(PersonaData, '/personadata/<codigo>')
+api.add_resource(PersonaDelete, '/personadelete/<persona_codigo>')
+
 
 if __name__ == '__main__':
     app.run(port = '5000', debug = True)
