@@ -45,6 +45,23 @@ def main():
             # msj = 'Dump realizado' if resultado == 0 else 'Error. La base da datos ingresada no existe o tal vez el usuario postgres no tenga permisos necesarios para realizar el dump, pruebe ingresando un usuario despues del parametro python main.py -U [USUARIO] -d [DB_NAME]'
             resultado_verificacion(resultado,'Error. La base da datos ingresada no existe o tal vez el usuario postgres no tenga permisos necesarios para realizar el dump, pruebe ingresando un usuario despues del parametro python main.py -u [USUARIO] -d [DB_NAME]')
 
+        elif '-h' in sys.argv:
+            # obtengo el parámetro del host y el posterior del array
+            indice_host = sys.argv.index('-h')
+            host = sys.argv[ indice_host + 1 ]
+
+            # obtengo el parámetro de usuario y el posterior del array
+            indice_usuario = sys.argv.index('-u')
+            usuario = sys.argv[indice_usuario + 1]
+           
+            # obtengo el parámetro de la base de datos y el posterior del array
+            indice_db = sys.argv.index('-d') if '-d' in sys.argv else None
+            db = sys.argv[indice_db + 1]
+
+            dump = f'pg_dump -h {host} -p 5432 -U {usuario} -d {db} -f dump_{db}.sql'
+            resultado = subprocess.call(shlex.split(dump))
+            resultado_verificacion(resultado,'Error. El host o usuario incorrectos. Tambien puede ser que la base da datos ingresada no existe.')
+
         ## en caso de tener el parametro para asignar usuario 
         elif '-u' in sys.argv:
             # obtengo el parámetro de usuario y el posterior del array
@@ -59,6 +76,8 @@ def main():
             resultado = subprocess.call(shlex.split(dump))
             # msj = 'Dump realizado' if resultado == 0 else 'Error. Usuario incorrecto o la base da datos ingresada no existe.'
             resultado_verificacion(resultado,'Error. Usuario incorrecto o la base da datos ingresada no existe.')
+
+        
 
         elif 'help' in sys.argv:
             print('\n\t *************** Ayudas ******************\n')
