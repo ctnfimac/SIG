@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  django:
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    command: celery -A settings worker --loglevel=info
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+
+  # panel de monitoreo
+  flower:
+    image: mher/flower
+    #command: flower --broker=redis://redis:6379/0 --port=5555
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis

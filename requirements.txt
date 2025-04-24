@@ -1,3 +1,9 @@
+# para el ejemplo de asincronismo
 httpx
 requests
 aiosmtplib
+
+# para el ejemplo de celery
+django
+redis
+celery
